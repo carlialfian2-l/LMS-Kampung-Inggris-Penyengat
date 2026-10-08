@@ -1,0 +1,967 @@
+<body>
+<title>Kampung Inggris</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Public+Sans:wght@400;500;600;700&amp;display=swap">
+<style>
+/* Layout: public marketing pages in a centered wrap; signed-in app is a sidebar + main shell that collapses to a drawer on phones. */
+:root{
+  --bg:#F3F6FB; --surface:#FFFFFF; --surface2:#EAF1FA; --line:#D8E2F0;
+  --fg:#10203D; --muted:#566884;
+  --brand:#0B2F6B; --brand-fg:#FFFFFF; --brand-ink:#0B2F6B;
+  --sky:#D8E8FB; --sky-ink:#0B2F6B;
+  --sun:#F5B82E; --sun-ink:#3A2700;
+  --hero-bg:#0B2F6B; --hero-fg:#FFFFFF; --hero-muted:#BFD2EE;
+  --good:#17724A; --good-bg:#DDF3E6; --warn:#7D5200; --warn-bg:#FFF0C7;
+  --bad:#B3261E; --bad-bg:#FBE0DD; --info:#124A9E; --info-bg:#DCEBFF;
+  --shadow:0 1px 2px rgba(11,47,107,.06),0 8px 24px rgba(11,47,107,.07);
+  --font-display:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;
+  --font-body:'Public Sans','Segoe UI',system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0A1220; --surface:#111C33; --surface2:#17274A; --line:#24365C;
+  --fg:#E7EEFA; --muted:#9BAAC7;
+  --brand:#2F6FD0; --brand-fg:#FFFFFF; --brand-ink:#8DBBFF;
+  --sky:#1B2F57; --sky-ink:#BBD6FF;
+  --hero-bg:#0F2A57; --hero-muted:#B5C9E8;
+  --good:#6FD39B; --good-bg:#12332A; --warn:#F5C45B; --warn-bg:#3A2D0E;
+  --bad:#FF9A92; --bad-bg:#3E1B19; --info:#9CC6FF; --info-bg:#16305C;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0A1220; --surface:#111C33; --surface2:#17274A; --line:#24365C;
+  --fg:#E7EEFA; --muted:#9BAAC7;
+  --brand:#2F6FD0; --brand-fg:#FFFFFF; --brand-ink:#8DBBFF;
+  --sky:#1B2F57; --sky-ink:#BBD6FF;
+  --hero-bg:#0F2A57; --hero-muted:#B5C9E8;
+  --good:#6FD39B; --good-bg:#12332A; --warn:#F5C45B; --warn-bg:#3A2D0E;
+  --bad:#FF9A92; --bad-bg:#3E1B19; --info:#9CC6FF; --info-bg:#16305C;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:15px/1.55 var(--font-body);-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--font-display);line-height:1.15;margin:0;text-wrap:balance;letter-spacing:-.01em}
+p{margin:0}
+a{color:var(--brand-ink)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.ic{flex:none;display:inline-block;vertical-align:middle}
+.muted{color:var(--muted)}
+.wrap{max-width:1120px;margin-inline:auto;padding-inline:16px}
+.grow{flex:1;min-width:0}
+.tnum{font-variant-numeric:tabular-nums}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 16px;border-radius:10px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-weight:600;text-decoration:none;color:var(--fg);transition:transform .12s,background .12s}
+.btn:hover{background:var(--surface2)}
+.btn:active{transform:translateY(1px)}
+.btn.prim{background:var(--brand);border-color:var(--brand);color:var(--brand-fg)}
+.btn.prim:hover{filter:brightness(1.12)}
+.btn.sun{background:var(--sun);border-color:var(--sun);color:var(--sun-ink)}
+.btn.sun:hover{filter:brightness(1.05)}
+.btn.sm{padding:6px 12px;font-size:13px;border-radius:8px}
+.btn.danger{color:var(--bad)}
+.btn.block{width:100%}
+.btn.onhero{background:transparent;border-color:rgba(255,255,255,.45);color:#fff}
+.btn.onhero:hover{background:rgba(255,255,255,.12)}
+
+/* badges + bars */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:600;background:var(--surface2);color:var(--muted);white-space:nowrap}
+.badge.info{background:var(--info-bg);color:var(--info)}
+.badge.good{background:var(--good-bg);color:var(--good)}
+.badge.warn{background:var(--warn-bg);color:var(--warn)}
+.badge.bad{background:var(--bad-bg);color:var(--bad)}
+.badge.sun{background:var(--sun);color:var(--sun-ink)}
+.bar{height:8px;border-radius:99px;background:var(--surface2);overflow:hidden}
+.bar>i{display:block;height:100%;border-radius:99px;background:var(--brand)}
+.bar.sunbar>i{background:var(--sun)}
+.pct{font-weight:700;font-variant-numeric:tabular-nums}
+
+/* cards */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow);min-width:0}
+.card.flat{box-shadow:none}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr))}
+.grid.two{grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))}
+.stack{display:flex;flex-direction:column;gap:12px}
+.row{display:flex;gap:12px;align-items:flex-start;padding:14px 0;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.cardrow{display:flex;gap:14px;align-items:flex-start;padding:16px;border:1px solid var(--line);background:var(--surface);border-radius:14px;flex-wrap:wrap}
+.rt{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.rt h4{font-size:16px}
+.meta{font-size:13px;color:var(--muted)}
+.acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.mi{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:var(--sky);color:var(--sky-ink);flex:none}
+.mi.t-video{background:var(--bad-bg);color:var(--bad)}
+.mi.t-audio{background:var(--warn-bg);color:var(--warn)}
+.mi.t-link{background:var(--good-bg);color:var(--good)}
+.empty{padding:28px 16px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:14px;display:flex;flex-direction:column;gap:12px;align-items:center}
+.avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;color:#fff;flex:none}
+.av0{background:#1D5FC4}.av1{background:#B4468A}.av2{background:#2E8B6A}.av3{background:#C2701A}.av4{background:#6A4FC2}.av5{background:#2A7F9C}
+
+/* public */
+.pnav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.pnav-in{display:flex;align-items:center;gap:12px;padding-block:12px;flex-wrap:wrap}
+.pnav-links{display:flex;gap:4px;margin-left:auto;align-items:center;flex-wrap:wrap}
+.pnav-links .lnk{background:none;border:0;cursor:pointer;padding:8px 10px;font-weight:600;color:var(--muted);border-radius:8px;text-decoration:none}
+.pnav-links .lnk:hover{color:var(--fg)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--fg);font-family:var(--font-display);font-weight:700;font-size:19px}
+.logo{width:34px;height:34px;border-radius:10px;background:var(--brand);color:var(--brand-fg);display:grid;place-items:center}
+.logo .ic{color:var(--sun)}
+.hero{background:var(--hero-bg);color:var(--hero-fg)}
+.hero-in{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:40px;padding-block:56px 64px;align-items:center}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--sun)}
+.hero h1{font-size:clamp(36px,6vw,62px);margin:12px 0 16px;letter-spacing:-.025em}
+.hero h1 em{font-style:normal;color:var(--sun)}
+.hero p.lead{color:var(--hero-muted);font-size:18px;max-width:52ch}
+.hero .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.hero-card{background:var(--surface);color:var(--fg);border-radius:20px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.28);transform:rotate(1.2deg)}
+.hero-card .mini{margin-top:12px;border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;gap:10px;align-items:center}
+.section{padding-block:56px}
+.section h2{font-size:clamp(26px,4vw,38px);margin-bottom:8px}
+.section .sub{color:var(--muted);max-width:60ch;margin-bottom:28px}
+.alt{background:var(--surface);border-block:1px solid var(--line)}
+.steps{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));counter-reset:s}
+.step{position:relative;padding:20px;border-radius:16px;background:var(--bg);border:1px solid var(--line)}
+.step::before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--sun);color:var(--sun-ink);font-weight:700;margin-bottom:12px}
+.step h4{margin-bottom:6px}
+.footer{padding-block:28px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+.pcard{display:flex;flex-direction:column;gap:12px}
+.pcard h3{font-size:22px}
+.pcard ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.pcard li{display:flex;gap:8px;align-items:center;font-size:14px}
+.pcard li .ic{color:var(--brand-ink)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.pcard .foot{margin-top:auto;padding-top:8px}
+.crumb{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--muted);margin-bottom:16px;flex-wrap:wrap}
+.crumb button{background:none;border:0;cursor:pointer;color:var(--brand-ink);padding:0;font-weight:600}
+.authbox{max-width:440px;margin:40px auto;padding-inline:16px}
+.divider{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:13px;margin:16px 0}
+.divider::before,.divider::after{content:"";height:1px;background:var(--line);flex:1}
+.demo{display:flex;gap:8px;flex-wrap:wrap}
+.pick{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr))}
+.pick button{display:flex;flex-direction:column;gap:10px;align-items:flex-start;text-align:left;padding:20px;border:2px solid var(--line);border-radius:16px;background:var(--surface);cursor:pointer}
+.pick button:hover{border-color:var(--brand)}
+.pick button .mi{width:46px;height:46px}
+
+/* forms */
+label{display:block;font-weight:600;font-size:13px;margin-bottom:6px}
+.fld{margin-bottom:14px;min-width:0}
+input[type=text],input[type=email],input[type=password],input[type=number],input[type=date],input[type=url],select,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);min-width:0}
+textarea{min-height:110px;resize:vertical}
+input[type=file]{width:100%;padding:8px;border:1px dashed var(--line);border-radius:10px;background:var(--bg)}
+.frow{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}
+.check{display:flex;gap:8px;align-items:center;font-weight:500}
+.check input{width:18px;height:18px}
+.hint{font-size:12px;color:var(--muted);margin-top:4px}
+
+/* app shell */
+.shell{display:grid;grid-template-columns:264px minmax(0,1fr);min-height:100dvh}
+.side{background:var(--surface);border-right:1px solid var(--line);padding:18px 12px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100dvh;overflow-y:auto}
+.side .brand{padding:4px 8px 16px}
+.side .who{display:flex;gap:10px;align-items:center;padding:10px 8px;margin-bottom:8px;border-radius:12px;background:var(--surface2)}
+.nav{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:0;background:none;cursor:pointer;text-align:left;font-weight:600;color:var(--muted);width:100%;text-decoration:none}
+.nav:hover{background:var(--surface2);color:var(--fg)}
+.nav.on{background:var(--brand);color:var(--brand-fg)}
+.nav.out{margin-top:auto}
+.main{padding:24px 16px 64px;min-width:0;max-width:1100px;width:100%}
+.topbar{display:none}
+.scrim{display:none}
+.ph{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;margin-bottom:20px}
+.ph h1{font-size:clamp(24px,4vw,32px)}
+.stats{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));margin-bottom:20px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.stat b{display:block;font:700 28px var(--font-display);font-variant-numeric:tabular-nums}
+.stat span{font-size:13px;color:var(--muted)}
+.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);margin-bottom:20px}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 14px;cursor:pointer;font-weight:600;color:var(--muted);white-space:nowrap}
+.tabs button.on{color:var(--brand-ink);border-color:var(--sun)}
+.chead{background:var(--hero-bg);color:var(--hero-fg);border-radius:18px;padding:22px;margin-bottom:20px}
+.chead h1{font-size:clamp(24px,4vw,34px)}
+.chead p{color:var(--hero-muted);margin-top:6px;max-width:64ch}
+.chead .bar{background:rgba(255,255,255,.2);margin-top:14px}
+.chead .bar>i{background:var(--sun)}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:640px}
+th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);font-size:14px}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);background:var(--surface2)}
+tr:last-child td{border-bottom:0}
+.post{display:flex;gap:12px;padding:14px 0;border-top:1px solid var(--line)}
+.post:first-child{border-top:0}
+.sub-box{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:14px}
+
+/* overlays */
+.modal-back{position:fixed;inset:0;background:rgba(5,12,28,.55);display:grid;place-items:center;padding:16px;z-index:60}
+.modal{background:var(--surface);color:var(--fg);border-radius:18px;padding:22px;max-width:480px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.modal h3{margin-bottom:8px}
+.preview{display:grid;place-items:center;gap:8px;padding:28px;background:var(--surface2);border-radius:14px;margin:12px 0;text-align:center}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 18px;border-radius:12px;font-weight:600;z-index:80;max-width:calc(100% - 32px);box-shadow:var(--shadow)}
+
+@media (max-width:900px){
+  .hero-in{grid-template-columns:minmax(0,1fr);padding-block:36px 44px}
+  .hero-card{transform:none}
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .topbar{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);z-index:30}
+  .topbar .burger{background:none;border:0;cursor:pointer;padding:6px;border-radius:8px}
+  .side{position:fixed;left:0;top:0;bottom:0;width:280px;max-width:86vw;z-index:50;transform:translateX(-102%);transition:transform .2s;padding-top:calc(18px + env(safe-area-inset-top,0px))}
+  .side.open{transform:none;box-shadow:var(--shadow)}
+  .scrim.on{display:block;position:fixed;inset:0;background:rgba(5,12,28,.45);z-index:40}
+  .main{padding-top:20px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div id="app"><div class="shell">
+   <aside class="side" id="side">
+    <a class="brand" href="#top" data-go="landing"><span class="logo"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"></path><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"></path></svg></span>Kampung Inggris</a>
+    <div class="who"><span class="avatar av5" aria-hidden="true">MT</span><div class="grow"><b style="display:block;font-size:14px">Michael Tan</b><span class="meta">Tutor</span></div></div>
+    <button class="nav " data-go="t-dash"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"></rect><rect x="13" y="4" width="7" height="7" rx="1.5"></rect><rect x="4" y="13" width="7" height="7" rx="1.5"></rect><rect x="13" y="13" width="7" height="7" rx="1.5"></rect></svg>Overview</button><button class="nav " data-go="t-classes"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h6a3 3 0 013 3v13a2 2 0 00-2-2H4z"></path><path d="M20 4h-6a3 3 0 00-3 3v13a2 2 0 012-2h7z"></path></svg>My Classes</button><button class="nav " data-go="t-class-new"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Create Class</button><button class="nav on" data-go="t-materials" aria-current="page"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"></path><path d="M14 3v5h5"></path></svg>Materials</button><button class="nav " data-go="t-assign"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"></rect><path d="M9 4h6v3H9z"></path><path d="M9 12h6M9 16h4"></path></svg>Assignments</button><button class="nav " data-go="t-subs"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>Student Submissions</button><button class="nav " data-go="t-students"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c0-3.5 3-5.5 6.5-5.5s6.5 2 6.5 5.5"></path><path d="M16 4.7a3.5 3.5 0 010 6.6M18 14.8c2.2.6 3.5 2.3 3.5 5.2"></path></svg>Students</button><button class="nav " data-go="t-profile"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>Profile</button>
+    <button class="nav out" data-act="logout"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H5a2 2 0 00-2 2v12a2 2 0 002 2h4"></path><path d="M16 8l4 4-4 4M20 12H9"></path></svg>Logout</button>
+   </aside>
+   <div class="scrim" data-act="close-menu"></div>
+   <div style="min-width:0">
+    <div class="topbar"><button class="burger" data-act="open-menu" aria-label="Open menu"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button><span class="brand" style="font-size:17px">Kampung Inggris</span></div>
+    <main class="main"><div class="crumb"><button data-go="t-materials">Materials</button> / <span>Add Material</span></div><div class="ph"><div><h1>Add Material</h1><p class="muted" style="margin-top:6px">Students only see published materials on or after the publish date.</p></div><div class="acts"></div></div>
+  <div class="card" style="max-width:720px"><form data-f="material" data-id="" novalidate="">
+   <div class="fld"><label for="mt">Material Title</label><input id="mt" name="title" type="text" value="" required=""></div>
+   <div class="fld"><label for="md">Description</label><textarea id="md" name="description" style="min-height:80px"></textarea></div>
+   <div class="frow"><div class="fld"><label for="mc">Class</label><select id="mc" name="classId"><option value="c3">Conversation Class (Speaking Intensive)</option><option value="c6">Basic Conversation Class (English Beginner)</option><option value="c7">Vocabulary Class (Vocabulary Booster)</option><option value="c12">Grammar Practice (Grammar Mastery)</option><option value="c14">IELTS Writing (IELTS Preparation)</option><option value="cdfx2l4x" selected="">Kelas Makro ML (Speaking Intensive)</option></select></div>
+    <div class="fld"><label for="my">Material Type</label><select id="my" name="type"><option value="pdf" selected="">PDF</option><option value="video">Video</option><option value="audio">Audio</option><option value="document">Document</option><option value="presentation">Presentation</option><option value="link">Link</option></select></div></div>
+   <div class="fld"><label for="mf">Upload File</label><input id="mf" name="file" type="file"></div>
+   <div class="fld"><label for="ml">External Link</label><input id="ml" name="fileUrl" type="url" placeholder="https://" value=""><p class="hint">Required when the type is Link.</p></div>
+   <div class="frow"><div class="fld"><label for="mp">Publish Date</label><input id="mp" name="date" type="date" value="2026-10-08" required=""></div>
+    <div class="fld"><label>Visibility</label><label class="check" style="margin-top:10px"><input type="checkbox" name="published" checked=""> Published</label></div></div>
+   <div class="acts"><button class="btn prim" type="submit">Add Material</button><button type="button" class="btn" data-go="t-materials">Cancel</button></div></form></div></main>
+   </div></div></div>
+<div id="modal"></div>
+<div id="toast" role="status" aria-live="polite" hidden="">Class created in Speaking Intensive.</div>
+
+<script>
+"use strict";
+/* ============ icons ============ */
+const P={
+ home:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',
+ grid:'<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',
+ book:'<path d="M4 4h6a3 3 0 013 3v13a2 2 0 00-2-2H4z"/><path d="M20 4h-6a3 3 0 00-3 3v13a2 2 0 012-2h7z"/>',
+ file:'<path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/>',
+ clip:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9z"/><path d="M9 12h6M9 16h4"/>',
+ chart:'<path d="M5 20V11M11 20V5M17 20v-6M3 20h18"/>',
+ user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>',
+ users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.5 3-5.5 6.5-5.5s6.5 2 6.5 5.5"/><path d="M16 4.7a3.5 3.5 0 010 6.6M18 14.8c2.2.6 3.5 2.3 3.5 5.2"/>',
+ logout:'<path d="M9 4H5a2 2 0 00-2 2v12a2 2 0 002 2h4"/><path d="M16 8l4 4-4 4M20 12H9"/>',
+ plus:'<path d="M12 5v14M5 12h14"/>',
+ menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',
+ play:'<circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/>',
+ link:'<path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/>',
+ mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/>',
+ slides:'<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>',
+ video:'<rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/>',
+ chat:'<path d="M4 5h16v11H9l-5 4z"/>',
+ check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+ edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',
+ trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
+ eye:'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+ download:'<path d="M12 4v11M7 11l5 5 5-5M5 20h14"/>',
+ cap:'<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/>',
+ arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+ star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>'
+};
+const ic=(n,s=18)=>`<svg class="ic" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[n]||''}</svg>`;
+const TI={pdf:'file',video:'video',audio:'mic',document:'file',presentation:'slides',link:'link'};
+const TL={pdf:'PDF',video:'Video',audio:'Audio',document:'Document',presentation:'Presentation',link:'External link'};
+const SL={not_started:'Not Started',in_progress:'In Progress',submitted:'Submitted',graded:'Graded'};
+const SB={not_started:'',in_progress:'warn',submitted:'info',graded:'good'};
+const STL={text:'Text answer',file:'File upload',audio:'Audio recording',video:'Video recording'};
+
+/* ============ helpers ============ */
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const iso=d=>{const z=new Date(d.getTime()-d.getTimezoneOffset()*60000);return z.toISOString().slice(0,10)};
+const addDays=n=>{const d=new Date();d.setDate(d.getDate()+n);return iso(d)};
+const todayS=()=>iso(new Date());
+const fmtD=(s,short)=>{try{return new Date(s+'T00:00:00').toLocaleDateString('en-US',short?{month:'short',day:'numeric',year:'numeric'}:{month:'long',day:'numeric',year:'numeric'})}catch(e){return s||''}};
+const uid=p=>p+Math.random().toString(36).slice(2,9);
+const first=n=>String(n||'').split(' ')[0];
+const initials=n=>String(n||'?').split(' ').filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join('');
+const avatar=(u,s)=>`<span class="avatar av${u.av??0}" ${s?`style="width:${s}px;height:${s}px"`:''} aria-hidden="true">${esc(initials(u.name))}</span>`;
+const badge=(t,k='')=>`<span class="badge ${k}">${esc(t)}</span>`;
+const bar=(p,cls='')=>`<div class="bar ${cls}" role="progressbar" aria-valuenow="${p}" aria-valuemin="0" aria-valuemax="100"><i style="width:${p}%"></i></div>`;
+const daysLeft=s=>Math.round((new Date(s+'T00:00:00')-new Date(todayS()+'T00:00:00'))/864e5);
+
+/* ============ seed data (swap this layer for Supabase/Firebase later) ============ */
+function seed(){
+  const users=[
+    {id:'u-ahmad',name:'Ahmad Fauzi',email:'ahmad@example.com',role:'student',selectedProgramId:'p1',av:0},
+    {id:'u-siti',name:'Siti Rahma',email:'siti@example.com',role:'student',selectedProgramId:'p5',av:1},
+    {id:'u-budi',name:'Budi Santoso',email:'budi@example.com',role:'student',selectedProgramId:'p3',av:2},
+    {id:'u-sarah',name:'Sarah Collins',email:'sarah@example.com',role:'tutor',av:3},
+    {id:'u-daniel',name:'Daniel Wright',email:'daniel@example.com',role:'tutor',av:4},
+    {id:'u-michael',name:'Michael Tan',email:'michael@example.com',role:'tutor',av:5}
+  ];
+  const defs=[
+   ['p1','Speaking Intensive','Intermediate','4 Weeks','Live group classes','Improve speaking fluency, pronunciation, confidence, and conversation skills.',[
+     ['Speaking Class','u-sarah','Monday & Wednesday, 19:00','Weekly speaking labs with guided prompts and peer feedback.'],
+     ['Pronunciation Class','u-daniel','Tuesday & Thursday, 18:30','Sounds, stress and intonation drills with recorded feedback.'],
+     ['Conversation Class','u-michael','Friday, 19:00','Free-flow conversation on everyday and work topics.']]],
+   ['p2','English Beginner','Beginner','4 Weeks','Small-group live classes','Learn basic English vocabulary, grammar, expressions, and everyday communication.',[
+     ['Beginner Class','u-daniel','Monday & Wednesday, 16:00','Start from zero: greetings, numbers and simple sentences.'],
+     ['Basic Grammar Class','u-sarah','Tuesday & Thursday, 16:00','Present simple, be-verbs and basic word order.'],
+     ['Basic Conversation Class','u-michael','Saturday, 10:00','Short role plays for shops, travel and introductions.']]],
+   ['p3','Vocabulary Booster','Beginner–Intermediate','3 Weeks','Interactive workshops','Expand vocabulary through thematic lessons and interactive activities.',[
+     ['Vocabulary Class','u-michael','Monday & Thursday, 19:30','Thematic word sets with collocations and examples.'],
+     ['Daily English Class','u-sarah','Tuesday & Friday, 07:00','Short morning lessons on phrases you can use today.'],
+     ['Vocabulary Practice','u-daniel','Saturday, 14:00','Quizzes, games and spaced review of new words.']]],
+   ['p4','Grammar Mastery','Intermediate','4 Weeks','Live classes and practice labs','Build strong English grammar knowledge through practical exercises.',[
+     ['Grammar Class','u-daniel','Monday & Wednesday, 20:00','Tenses, conditionals and passive voice explained clearly.'],
+     ['Sentence Building Class','u-sarah','Tuesday, 19:00','Combine clauses and connect ideas in writing and speech.'],
+     ['Grammar Practice','u-michael','Thursday, 20:00','Timed exercises with immediate correction.']]],
+   ['p5','IELTS Preparation','Intermediate–Advanced','6 Weeks','Exam-focused live classes','Prepare students for IELTS through structured practice.',[
+     ['IELTS Speaking','u-sarah','Monday, 19:00','Parts 1 to 3 with band-descriptor feedback.'],
+     ['IELTS Writing','u-michael','Wednesday, 19:00','Task 1 and Task 2 structure, timing and review.'],
+     ['IELTS Reading','u-daniel','Thursday, 19:00','Skimming, scanning and question-type strategy.'],
+     ['IELTS Listening','u-sarah','Saturday, 09:00','Section-by-section practice with full mock tests.']]]
+  ];
+  const programs=[],classes=[];let n=0;
+  defs.forEach(d=>{programs.push({id:d[0],name:d[1],level:d[2],duration:d[3],classType:d[4],description:d[5]});
+    d[6].forEach(c=>{n++;classes.push({id:'c'+n,programId:d[0],tutorId:c[1],name:c[0],description:c[3],schedule:c[2],level:d[2],max:20,classType:d[4]})})});
+  const MT=[['pdf','Study guide','guide.pdf'],['video','Lesson video','lesson.mp4'],['audio','Listening practice','practice.mp3'],['presentation','Slide deck','slides.pptx'],['link','Extra reading',''],['document','Worksheet','worksheet.docx']];
+  const materials=[],assignments=[],discussions=[];
+  const AT=['text','file','audio','video'];
+  classes.forEach((c,i)=>{
+    for(let k=0;k<3;k++){const t=MT[(i+k)%6];
+      materials.push({id:`m-${c.id}-${k+1}`,classId:c.id,tutorId:c.tutorId,title:`${c.name}: ${t[1]} ${k+1}`,description:`Week ${k+1} material for ${c.name}. Read or watch before your next session.`,type:t[0],fileName:t[2]?`week-${k+1}-${t[2]}`:'',fileUrl:t[0]==='link'?'https://www.bbc.co.uk/learningenglish':'',published:true,date:addDays(-(12-k*4))})}
+    assignments.push({id:`a-${c.id}-1`,classId:c.id,tutorId:c.tutorId,title:`${c.name}: Practice Task 1`,description:`Complete the first practice task for ${c.name} and submit it before the due date.`,dueDate:addDays(4+(i%7)),submissionType:AT[i%4],maxScore:100});
+    assignments.push({id:`a-${c.id}-2`,classId:c.id,tutorId:c.tutorId,title:`${c.name}: Practice Task 2`,description:`A short follow-up task that builds on Practice Task 1.`,dueDate:addDays(11+(i%5)),submissionType:AT[(i+2)%4],maxScore:100});
+    discussions.push({id:'d-'+c.id,classId:c.id,authorId:c.tutorId,text:`Welcome to ${c.name}! Post your questions here and I will reply between sessions.`,date:addDays(-13)});
+  });
+  const A=(id,patch)=>Object.assign(assignments.find(a=>a.id===id),patch);
+  A('a-c1-1',{title:'Speaking Practice: Self Introduction',description:'Introduce yourself in 60 to 90 seconds: your name, where you live, what you do and why you are learning English.',dueDate:'2026-10-15',submissionType:'audio'});
+  A('a-c1-2',{title:'Describe Your Daily Routine',description:'Describe a normal weekday from morning to night. Use at least five time expressions.',dueDate:'2026-10-20',submissionType:'audio'});
+  const submissions=[
+    {id:'s1',assignmentId:'a-c1-1',studentId:'u-ahmad',content:'Hello, my name is Ahmad. I live in Tanjung Pinang and I work in a shipping office. I want to improve my speaking for work.',fileName:'self-intro.m4a',status:'graded',score:86,feedback:'Clear and confident delivery. Slow down slightly on numbers and watch the "th" sound in "think".',submittedAt:addDays(-5)},
+    {id:'s2',assignmentId:'a-c2-1',studentId:'u-ahmad',content:'Minimal pairs: ship / sheep, full / fool, live / leave.',fileName:'minimal-pairs.mp4',status:'submitted',score:null,feedback:'',submittedAt:addDays(-1)},
+    {id:'s3',assignmentId:'a-c3-1',studentId:'u-ahmad',content:'We talked about travel. My favourite trip was to Batam last year.',fileName:'',status:'submitted',score:null,feedback:'',submittedAt:addDays(-2)},
+    {id:'s4',assignmentId:'a-c13-1',studentId:'u-siti',content:'Part 2 cue card: a book that changed my mind. I chose a novel about a fisherman who learns to forgive.',fileName:'part2.m4a',status:'submitted',score:null,feedback:'',submittedAt:addDays(-1)},
+    {id:'s5',assignmentId:'a-c16-1',studentId:'u-siti',content:'Section 1 answers: 1) 14th June 2) library 3) Harrison 4) 6.30 5) student card',fileName:'',status:'graded',score:78,feedback:'Good listening accuracy. Check spelling on question 3.',submittedAt:addDays(-4)},
+    {id:'s6',assignmentId:'a-c7-1',studentId:'u-budi',content:'Food collocations: fresh fruit, spicy sauce, rich flavour, light snack.',fileName:'',status:'graded',score:90,feedback:'Excellent range. Try adding one idiom next time.',submittedAt:addDays(-3)}
+  ];
+  const completions=[['u-ahmad','m-c1-1'],['u-ahmad','m-c1-2'],['u-ahmad','m-c2-1'],['u-ahmad','m-c2-2'],['u-ahmad','m-c2-3'],['u-ahmad','m-c3-1'],['u-siti','m-c13-1'],['u-siti','m-c16-1'],['u-budi','m-c7-1'],['u-budi','m-c7-2']].map(x=>({studentId:x[0],materialId:x[1]}));
+  const db={users,programs,classes,enrollments:[],materials,assignments,submissions,completions,discussions,session:null,pending:null};
+  users.filter(u=>u.role==='student').forEach(u=>syncEnroll(u,db));
+  return db;
+}
+function syncEnroll(u,d=db){
+  d.enrollments=d.enrollments.filter(e=>e.studentId!==u.id);
+  if(u.role==='student'&&u.selectedProgramId)
+    d.classes.filter(c=>c.programId===u.selectedProgramId).forEach(c=>d.enrollments.push({id:uid('e'),studentId:u.id,programId:c.programId,classId:c.id,progress:0}));
+}
+
+/* ============ storage ============ */
+const KEY='kampung-inggris-v1';
+let db;
+try{const raw=localStorage.getItem(KEY);db=raw?JSON.parse(raw):null}catch(e){db=null}
+if(!db||!db.users)db=seed();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){}};
+
+/* ============ auth adapter (replace bodies with Supabase/Firebase calls) ============ */
+const Auth={
+  signUpEmail({name,email,password}){
+    if(db.users.some(u=>u.email.toLowerCase()===email.toLowerCase()))throw new Error('That email already has an account. Log in instead.');
+    const u={id:uid('u'),name,email,role:null,selectedProgramId:null,av:Math.floor(Math.random()*6)};
+    db.users.push(u);return u;
+  },
+  signInEmail({email,password}){
+    const u=db.users.find(x=>x.email.toLowerCase()===email.toLowerCase());
+    if(!u)throw new Error('No account found for that email. Sign up first.');
+    if(!password)throw new Error('Enter your password.');
+    return u;
+  },
+  signInGoogle(){ /* mock: replace with OAuth popup / redirect */
+    const email='google.learner@gmail.com';
+    return db.users.find(x=>x.email===email)||(db.users.push({id:uid('u'),name:'Google Learner',email,role:null,selectedProgramId:null,av:5}),db.users[db.users.length-1]);
+  },
+  signOut(){db.session=null}
+};
+
+/* ============ selectors ============ */
+const me=()=>db.users.find(u=>u.id===db.session)||null;
+const usr=id=>db.users.find(u=>u.id===id)||{name:'Unknown',av:0};
+const prog=id=>db.programs.find(p=>p.id===id);
+const cls=id=>db.classes.find(c=>c.id===id);
+const progClasses=pid=>db.classes.filter(c=>c.programId===pid);
+const classesFor=u=>u&&u.selectedProgramId?progClasses(u.selectedProgramId):[];
+const tClasses=u=>db.classes.filter(c=>c.tutorId===u.id);
+const visibleMats=cid=>db.materials.filter(m=>m.classId===cid&&m.published&&m.date<=todayS()).sort((a,b)=>b.date.localeCompare(a.date));
+const classAssigns=cid=>db.assignments.filter(a=>a.classId===cid);
+const isDone=(sid,mid)=>db.completions.some(c=>c.studentId===sid&&c.materialId===mid);
+const subOf=(aid,sid)=>db.submissions.find(s=>s.assignmentId===aid&&s.studentId===sid);
+const statusOf=(aid,sid)=>{const s=subOf(aid,sid);return s?s.status:'not_started'};
+function classProg(sid,cid){
+  const ms=visibleMats(cid),as=classAssigns(cid),tot=ms.length+as.length;if(!tot)return 0;
+  const done=ms.filter(m=>isDone(sid,m.id)).length+as.filter(a=>['submitted','graded'].includes(statusOf(a.id,sid))).length;
+  return Math.round(done/tot*100);
+}
+function overall(u){const cs=classesFor(u);return cs.length?Math.round(cs.reduce((t,c)=>t+classProg(u.id,c.id),0)/cs.length):0}
+const studentsOfProgram=pid=>db.users.filter(u=>u.role==='student'&&u.selectedProgramId===pid);
+const tutorName=c=>first(usr(c.tutorId).name);
+
+/* ============ routing + guards ============ */
+const PUBLIC=['landing','programs','program','login','signup'];
+let R={name:'landing',p:{}};
+function homeOf(u){return u.role==='tutor'?'t-dash':'s-dash'}
+function go(name,p={}){
+  const u=me();
+  if(!PUBLIC.includes(name)){
+    if(!u){db.pending=db.pending;R={name:'login',p:{}};return finish()}
+    if(name!=='role'&&!u.role){R={name:'role',p:{}};return finish()}
+    if(name.startsWith('s-')&&u.role!=='student'){toast('Access denied: that page is for students.');R={name:homeOf(u),p:{}};return finish()}
+    if(name.startsWith('t-')&&u.role!=='tutor'){toast('Access denied: that page is for tutors.');R={name:homeOf(u),p:{}};return finish()}
+  }
+  R={name,p};finish();
+}
+function finish(){closeMenu();render();window.scrollTo(0,0)}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>{t.hidden=true},3200)}
+function closeMenu(){const s=document.querySelector('.side'),c=document.querySelector('.scrim');s&&s.classList.remove('open');c&&c.classList.remove('on')}
+function afterAuth(u){
+  db.session=u.id;save();
+  if(!u.role)return go('role');
+  go(homeOf(u));
+}
+
+/* ============ shells ============ */
+const logoMark=`<span class="logo">${ic('cap',20)}</span>`;
+function pubNav(){
+  const u=me();
+  return `<header class="pnav"><div class="wrap pnav-in">
+   <a class="brand" href="#top" data-go="landing">${logoMark}Kampung Inggris</a>
+   <nav class="pnav-links" aria-label="Main">
+    <a class="lnk" href="#top" data-go="programs">Programs</a>
+    ${u?`<button class="btn prim sm" data-go="${u.role?homeOf(u):'role'}">Dashboard</button>`
+      :`<a class="lnk" href="#top" data-go="login">Login</a><button class="btn sun sm" data-go="programs">Daftar Program</button>`}
+   </nav></div></header>`;
+}
+const footer=()=>`<footer class="footer"><div class="wrap">Kampung Inggris is a demo LMS prototype. All people, classes and results shown are sample data.</div></footer>`;
+
+const NAV={
+  student:[['s-dash','Dashboard','grid'],['s-classes','My Classes','book'],['s-materials','Materials','file'],['s-assign','Assignments','clip'],['s-progress','Progress','chart'],['s-profile','Profile','user']],
+  tutor:[['t-dash','Overview','grid'],['t-classes','My Classes','book'],['t-class-new','Create Class','plus'],['t-materials','Materials','file'],['t-assign','Assignments','clip'],['t-subs','Student Submissions','check'],['t-students','Students','users'],['t-profile','Profile','user']]
+};
+const PARENT={'s-class':'s-classes','s-submit':'s-assign','t-class':'t-classes','t-material-form':'t-materials','t-assign-new':'t-assign','t-grade':'t-subs'};
+function appShell(u,body){
+  const cur=PARENT[R.name]||R.name;
+  const items=NAV[u.role].map(n=>`<button class="nav ${n[0]===cur?'on':''}" data-go="${n[0]}" ${n[0]===cur?'aria-current="page"':''}>${ic(n[2])}${n[1]}</button>`).join('');
+  return `<div class="shell">
+   <aside class="side" id="side">
+    <a class="brand" href="#top" data-go="landing">${logoMark}Kampung Inggris</a>
+    <div class="who">${avatar(u)}<div class="grow"><b style="display:block;font-size:14px">${esc(u.name)}</b><span class="meta">${u.role==='tutor'?'Tutor':'Student'}</span></div></div>
+    ${items}
+    <button class="nav out" data-act="logout">${ic('logout')}Logout</button>
+   </aside>
+   <div class="scrim" data-act="close-menu"></div>
+   <div style="min-width:0">
+    <div class="topbar"><button class="burger" data-act="open-menu" aria-label="Open menu">${ic('menu',22)}</button><span class="brand" style="font-size:17px">Kampung Inggris</span></div>
+    <main class="main">${body}</main>
+   </div></div>`;
+}
+const ph=(t,sub,actions='')=>`<div class="ph"><div><h1>${t}</h1>${sub?`<p class="muted" style="margin-top:6px">${sub}</p>`:''}</div><div class="acts">${actions}</div></div>`;
+const empty=(msg,btn='')=>`<div class="empty"><p>${msg}</p>${btn}</div>`;
+
+/* ============ public views ============ */
+function programCard(p,withBtn=true){
+  const cs=progClasses(p.id);
+  return `<article class="card pcard">
+   <div class="chips">${badge(p.level,'info')}${badge(p.duration)}${badge(p.classType,'warn')}</div>
+   <h3>${esc(p.name)}</h3><p class="muted">${esc(p.description)}</p>
+   <div><div class="meta" style="margin-bottom:6px">Available classes</div><ul>${cs.map(c=>`<li>${ic('check',16)}${esc(c.name)}</li>`).join('')}</ul></div>
+   ${withBtn?`<div class="foot"><button class="btn prim block" data-go="program" data-p='${JSON.stringify({id:p.id})}'>Pilih Program ${ic('arrow',16)}</button></div>`:''}
+  </article>`;
+}
+const V={};
+V.landing=()=>{
+  const sample=db.classes[0];
+  return `${pubNav()}
+  <section class="hero"><div class="wrap hero-in">
+   <div><span class="eyebrow">Inspired by the English village of Pare, East Java</span>
+    <h1>Learn English, <em>Grow Your Confidence.</em></h1>
+    <p class="lead">Join structured programs and interactive classes with real tutors. Pick a program, open your classes, and turn every lesson into practice you can hear improving.</p>
+    <div class="ctas"><button class="btn sun" data-go="programs">Daftar Program ${ic('arrow',16)}</button><button class="btn onhero" data-go="login">Login</button></div></div>
+   <div class="hero-card" aria-hidden="true">
+    <div class="meta">Your class today</div>
+    <h3 style="font-size:24px;margin:6px 0 4px">${esc(sample.name)}</h3>
+    <div class="meta">Tutor ${esc(tutorName(sample))} · ${esc(sample.schedule)}</div>
+    <div style="margin-top:14px;display:flex;justify-content:space-between"><span class="meta">Progress</span><span class="pct">70%</span></div>${bar(70)}
+    <div class="mini"><span class="mi">${ic('mic')}</span><div><b style="font-size:14px">Self Introduction</b><div class="meta">Audio · due soon</div></div></div>
+    <div class="mini"><span class="mi">${ic('star')}</span><div><b style="font-size:14px">Graded: 86 / 100</b><div class="meta">Feedback from your tutor</div></div></div>
+   </div></div></section>
+
+  <section class="section"><div class="wrap"><h2>Available programs</h2><p class="sub">Choose the program that fits your goal. Your program decides which classes you join.</p>
+   <div class="grid">${db.programs.map(p=>programCard(p)).join('')}</div></div></section>
+
+  <section class="section alt"><div class="wrap"><h2>Why Kampung Inggris?</h2><p class="sub">A learning village approach, moved online and organized into clear programs.</p>
+   <div class="grid">
+    ${[['cap','Structured programs','Each program bundles three or four classes that fit together, so you never guess what to study next.'],['users','Real tutors','Every class has a named tutor who posts materials, answers questions and grades your work.'],['mic','Practice with feedback','Submit text, files, audio or video and get a score with written feedback.'],['chart','Visible progress','Track completed materials and submitted work for each class and for your whole program.']]
+      .map(x=>`<div class="card flat"><span class="mi" style="margin-bottom:12px">${ic(x[0])}</span><h4 style="font-size:18px;margin-bottom:6px">${x[1]}</h4><p class="muted">${x[2]}</p></div>`).join('')}
+   </div></div></section>
+
+  <section class="section"><div class="wrap"><h2>How it works</h2><p class="sub">From first visit to your first grade.</p>
+   <div class="steps">
+    <div class="step"><h4>Choose a program</h4><p class="muted">Browse programs without logging in and open the one you like.</p></div>
+    <div class="step"><h4>Sign up</h4><p class="muted">Use email or Google, then confirm that you are a student.</p></div>
+    <div class="step"><h4>Open your classes</h4><p class="muted">Your dashboard shows only the classes in your program.</p></div>
+    <div class="step"><h4>Submit and improve</h4><p class="muted">Finish materials, submit assignments and read your tutor's feedback.</p></div>
+   </div></div></section>
+
+  <section class="section alt"><div class="wrap"><h2>Benefits for students and tutors</h2><p class="sub">One place for the whole class.</p>
+   <div class="grid two">
+    <div class="card"><div class="rt" style="margin-bottom:10px">${badge('Students','info')}</div><div class="stack">
+      <p>${ic('check',16)} See your classes, schedule and progress in one dashboard.</p><p>${ic('check',16)} Open published materials and mark them complete.</p><p>${ic('check',16)} Submit work before the due date and read grades and feedback.</p></div></div>
+    <div class="card"><div class="rt" style="margin-bottom:10px">${badge('Tutors','warn')}</div><div class="stack">
+      <p>${ic('check',16)} Create classes inside a program and they reach enrolled students at once.</p><p>${ic('check',16)} Publish materials and set assignments with a due date and maximum score.</p><p>${ic('check',16)} Review submissions, grade them and leave feedback in one list.</p></div></div>
+   </div></div></section>
+  ${footer()}`;
+};
+V.programs=()=>`${pubNav()}<div class="wrap section">
+  <h2>Daftar Program</h2><p class="sub">Pick a program to see its classes and tutors. You only need to log in after you choose.</p>
+  <div class="grid">${db.programs.map(p=>programCard(p)).join('')}</div></div>${footer()}`;
+V.program=()=>{
+  const p=prog(R.p.id);if(!p){return `${pubNav()}<div class="wrap section">${empty('Program not found.',`<button class="btn" data-go="programs">Back to programs</button>`)}</div>`}
+  const u=me();
+  return `${pubNav()}<div class="wrap section">
+   <div class="crumb"><button data-go="programs">Daftar Program</button> / <span>${esc(p.name)}</span></div>
+   <div class="grid two" style="align-items:start">
+    <div><div class="chips" style="margin-bottom:12px">${badge(p.level,'info')}${badge(p.duration)}${badge(p.classType,'warn')}</div>
+     <h1 style="font-size:clamp(30px,5vw,46px);margin-bottom:12px">${esc(p.name)}</h1><p class="muted" style="font-size:17px;max-width:52ch">${esc(p.description)}</p>
+     <div class="acts" style="margin-top:22px"><button class="btn prim" data-act="register" data-id="${p.id}">Daftar Sekarang ${ic('arrow',16)}</button><button class="btn" data-go="programs">Other programs</button></div>
+     ${u&&u.role==='tutor'?`<p class="hint" style="margin-top:10px">You are logged in as a tutor. Log out to enroll as a student.</p>`:''}</div>
+    <div class="card"><h3 style="font-size:20px;margin-bottom:4px">Classes in this program</h3><p class="meta" style="margin-bottom:8px">${progClasses(p.id).length} classes, all included</p>
+     ${progClasses(p.id).map(c=>`<div class="row"><span class="mi">${ic('book')}</span><div class="grow"><h4 style="font-size:16px">${esc(c.name)}</h4><p class="muted" style="font-size:14px">${esc(c.description)}</p><p class="meta" style="margin-top:4px">Tutor ${esc(tutorName(c))} · ${esc(c.schedule)}</p></div></div>`).join('')}</div>
+   </div></div>${footer()}`;
+};
+const googleBtn=txt=>`<button type="button" class="btn block" data-act="google"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.6a4.8 4.8 0 01-2.1 3.1v2.6h3.4c2-1.8 3.1-4.5 3.1-7.5z"/><path fill="#34A853" d="M12 22c2.8 0 5.1-.9 6.8-2.5l-3.4-2.6c-.9.6-2.1 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H2.9v2.700A10 10 0 0012 22z"/><path fill="#FBBC05" d="M6.400 13.800a6 6 0 010-3.800V7.300H2.900a10 10 0 000 9.200z"/><path fill="#EA4335" d="M12 6c1.500 0 2.800.5 3.900 1.500l2.900-2.900A10 10 0 002.900 7.300L6.400 10C7.200 7.700 9.400 6 12 6z"/></svg>${txt}</button>`;
+function pendingNote(){const p=db.pending&&prog(db.pending);return p?`<div class="card flat" style="margin-bottom:16px;padding:12px 14px;background:var(--sky);border-color:transparent"><span class="meta" style="color:var(--sky-ink)">Selected program</span><div style="font-weight:700;color:var(--sky-ink)">${esc(p.name)}</div></div>`:''}
+V.login=()=>`${pubNav()}<div class="authbox"><div class="card">
+  <h2 style="font-size:28px;margin-bottom:6px">Login</h2><p class="muted" style="margin-bottom:16px">Welcome back to Kampung Inggris.</p>${pendingNote()}
+  <form data-f="login" novalidate>
+   <div class="fld"><label for="le">Email</label><input id="le" name="email" type="email" autocomplete="email" required></div>
+   <div class="fld"><label for="lp">Password</label><input id="lp" name="password" type="password" autocomplete="current-password" required></div>
+   <button class="btn prim block" type="submit">Login</button></form>
+  <div class="divider">or</div>${googleBtn('Continue with Google')}
+  <p class="meta" style="margin-top:16px;text-align:center">No account yet? <a href="#top" data-go="signup" style="font-weight:700">Sign Up</a></p>
+  <div class="divider">Demo accounts (any password)</div>
+  <div class="demo">${db.users.filter(u=>u.id.startsWith('u-')).map(u=>`<button class="btn sm" data-act="demo" data-email="${esc(u.email)}">${esc(first(u.name))} · ${u.role==='tutor'?'Tutor':'Student'}</button>`).join('')}</div>
+  <p class="hint" style="margin-top:8px">Authentication is mocked in this prototype. Google sign-in creates a local sample account.</p>
+ </div></div>${footer()}`;
+V.signup=()=>`${pubNav()}<div class="authbox"><div class="card">
+  <h2 style="font-size:28px;margin-bottom:6px">Sign Up</h2><p class="muted" style="margin-bottom:16px">Create your Kampung Inggris account.</p>${pendingNote()}
+  <form data-f="signup" novalidate>
+   <div class="fld"><label for="sn">Full Name</label><input id="sn" name="name" type="text" autocomplete="name" required></div>
+   <div class="fld"><label for="se">Email</label><input id="se" name="email" type="email" autocomplete="email" required></div>
+   <div class="fld"><label for="sp">Password</label><input id="sp" name="password" type="password" autocomplete="new-password" required><p class="hint">At least 6 characters.</p></div>
+   <div class="fld"><label for="sc">Confirm Password</label><input id="sc" name="confirm" type="password" autocomplete="new-password" required></div>
+   <button class="btn prim block" type="submit">Sign Up with Email</button></form>
+  <div class="divider">or</div>${googleBtn('Continue with Google')}
+  <p class="meta" style="margin-top:16px;text-align:center">Already registered? <a href="#top" data-go="login" style="font-weight:700">Login</a></p>
+ </div></div>${footer()}`;
+V.role=()=>{
+  const u=me();
+  return `${pubNav()}<div class="wrap section" style="max-width:720px">
+   <h2>How will you use Kampung Inggris?</h2><p class="sub">Hi ${esc(first(u.name))}. Pick a role to continue. You can only have one role per account.</p>${pendingNote()}
+   <div class="pick">
+    <button data-act="role" data-role="student"><span class="mi">${ic('cap',24)}</span><b style="font-family:var(--font-display);font-size:20px">Student</b><span class="muted">Join a program, study materials and submit assignments.</span></button>
+    <button data-act="role" data-role="tutor"><span class="mi">${ic('edit',24)}</span><b style="font-family:var(--font-display);font-size:20px">Tutor</b><span class="muted">Create classes, share materials and grade student work.</span></button>
+   </div></div>`;
+};
+
+/* ============ student views ============ */
+function classCard(c,u){
+  const ms=visibleMats(c.id),as=classAssigns(c.id),pg=classProg(u.id,c.id);
+  return `<article class="card stack">
+   <div class="rt"><span class="mi">${ic('book')}</span><div class="grow"><h3 style="font-size:19px">${esc(c.name)}</h3><div class="meta">Tutor: ${esc(tutorName(c))}</div></div></div>
+   <div class="meta">${ic('clock',14)} ${esc(c.schedule)}</div>
+   <div><div style="display:flex;justify-content:space-between"><span class="meta">Progress</span><span class="pct">${pg}%</span></div>${bar(pg)}</div>
+   <div class="meta">Materials: <b class="tnum">${ms.length}</b> · Assignments: <b class="tnum">${as.length}</b></div>
+   <button class="btn prim" data-go="s-class" data-p='${JSON.stringify({id:c.id})}'>Open Class</button></article>`;
+}
+function matRow(m,sid,showClass){
+  const done=isDone(sid,m.id);
+  return `<article class="cardrow"><div class="mi t-${m.type}">${ic(TI[m.type])}</div>
+   <div class="grow"><div class="rt"><h4>${esc(m.title)}</h4>${badge(TL[m.type],'info')}${done?badge('Completed','good'):''}</div>
+   <p class="muted" style="margin-top:2px">${esc(m.description)}</p>
+   <p class="meta" style="margin-top:4px">Uploaded ${fmtD(m.date,1)} · Tutor ${esc(first(usr(m.tutorId).name))}${showClass?` · ${esc(cls(m.classId).name)}`:''}</p></div>
+   <div class="acts"><button class="btn sm" data-act="view-mat" data-id="${m.id}">${ic('eye',15)}View</button><button class="btn sm" data-act="dl-mat" data-id="${m.id}">${ic('download',15)}Download</button>
+   <button class="btn sm ${done?'':'prim'}" data-act="complete-mat" data-id="${m.id}">${done?'Undo complete':'Mark complete'}</button></div></article>`;
+}
+function dueChip(a,st){
+  if(['submitted','graded'].includes(st))return '';
+  const d=daysLeft(a.dueDate);
+  return d<0?badge(`Overdue by ${-d}d`,'bad'):d===0?badge('Due today','warn'):d<=3?badge(`${d}d left`,'warn'):'';
+}
+function assignCard(a,sid,showClass=true){
+  const st=statusOf(a.id,sid),s=subOf(a.id,sid);
+  return `<article class="cardrow"><div class="mi">${ic('clip')}</div>
+   <div class="grow"><div class="rt"><h4>${esc(a.title)}</h4>${badge(SL[st],SB[st])}${dueChip(a,st)}</div>
+   <p class="muted" style="margin-top:2px">${esc(a.description)}</p>
+   <p class="meta" style="margin-top:4px">Due ${fmtD(a.dueDate)} · ${STL[a.submissionType]}${showClass?` · ${esc(cls(a.classId).name)}`:''}${st==='graded'?` · Score <b>${s.score}/${a.maxScore}</b>`:''}</p></div>
+   <div class="acts"><button class="btn sm ${st==='graded'||st==='submitted'?'':'prim'}" data-go="s-submit" data-p='${JSON.stringify({id:a.id})}'>${st==='graded'?'View feedback':st==='submitted'?'View submission':st==='in_progress'?'Continue':'Submit Assignment'}</button></div></article>`;
+}
+function noProgram(){return empty('You have not selected a program yet. Choose one to unlock your classes.',`<button class="btn prim" data-go="programs">Daftar Program</button>`)}
+const upcoming=u=>classesFor(u).flatMap(c=>classAssigns(c.id)).filter(a=>!['submitted','graded'].includes(statusOf(a.id,u.id))).sort((a,b)=>a.dueDate.localeCompare(b.dueDate));
+V['s-dash']=()=>{
+  const u=me(),p=prog(u.selectedProgramId),cs=classesFor(u);
+  if(!p)return ph(`Welcome, ${esc(first(u.name))}!`,'Let us find your program.')+noProgram();
+  const up=upcoming(u).slice(0,4),rm=cs.flatMap(c=>visibleMats(c.id)).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,4),pg=overall(u);
+  return ph(`Welcome, ${esc(first(u.name))}!`,`Here is where you stand today.`)+`
+  <div class="chead"><span class="eyebrow">Program</span><h1 style="margin-top:4px">${esc(p.name)}</h1><p>${esc(p.level)} · ${esc(p.duration)}</p>
+   <div style="display:flex;justify-content:space-between;margin-top:14px"><span style="color:var(--hero-muted)">Overall progress</span><span class="pct">${pg}%</span></div>${bar(pg)}</div>
+  <div class="grid two">
+   <section class="card"><h3 style="font-size:20px;margin-bottom:6px">Your classes</h3>
+    ${cs.map((c,i)=>`<div class="row"><span class="mi">${i+1}</span><div class="grow"><h4 style="font-size:16px">${esc(c.name)}</h4><div class="meta">Tutor ${esc(tutorName(c))} · ${esc(c.schedule)}</div>${bar(classProg(u.id,c.id))}</div><button class="btn sm" data-go="s-class" data-p='${JSON.stringify({id:c.id})}'>Open</button></div>`).join('')}</section>
+   <section class="card"><h3 style="font-size:20px;margin-bottom:6px">Upcoming assignments</h3>
+    ${up.length?up.map(a=>`<div class="row"><div class="grow"><h4 style="font-size:16px">${esc(a.title)}</h4><div class="meta">${esc(cls(a.classId).name)} · Due ${fmtD(a.dueDate,1)}</div></div>${dueChip(a,statusOf(a.id,u.id))}<button class="btn sm prim" data-go="s-submit" data-p='${JSON.stringify({id:a.id})}'>Open</button></div>`).join(''):empty('Nothing due. You are all caught up.')}</section>
+  </div>
+  <section class="card" style="margin-top:16px"><div class="rt" style="justify-content:space-between;margin-bottom:6px"><h3 style="font-size:20px">Recent materials</h3><button class="btn sm" data-go="s-materials">All materials</button></div>
+   ${rm.length?`<div class="stack">${rm.map(m=>matRow(m,u.id,true)).join('')}</div>`:empty('No materials have been published yet.')}</section>`;
+};
+V['s-classes']=()=>{const u=me(),cs=classesFor(u);
+  return ph('My Classes',u.selectedProgramId?`Program: <b>${esc(prog(u.selectedProgramId).name)}</b>`:'')+(cs.length?`<div class="grid">${cs.map(c=>classCard(c,u)).join('')}</div>`:noProgram())};
+V['s-class']=()=>{
+  const u=me(),c=cls(R.p.id);
+  if(!c||c.programId!==u.selectedProgramId){setTimeout(()=>{toast('You do not have access to that class.');go('s-classes')},0);return ''}
+  const tab=R.p.tab||'overview',pg=classProg(u.id,c.id),ms=visibleMats(c.id),as=classAssigns(c.id);
+  const tabs=[['overview','Overview'],['materials','Materials'],['assignments','Assignments'],['discussions','Discussions'],['progress','Progress']];
+  let body='';
+  if(tab==='overview'){
+    const nx=as.filter(a=>!['submitted','graded'].includes(statusOf(a.id,u.id))).sort((a,b)=>a.dueDate.localeCompare(b.dueDate))[0];
+    body=`<div class="grid two"><div class="card"><h3 style="font-size:20px;margin-bottom:8px">About this class</h3><p>${esc(c.description)}</p>
+      <div class="stack" style="margin-top:14px"><p class="meta">Tutor: <b>${esc(usr(c.tutorId).name)}</b></p><p class="meta">Schedule: <b>${esc(c.schedule)}</b></p><p class="meta">Level: <b>${esc(c.level)}</b> · ${esc(c.classType)}</p></div></div>
+      <div class="card"><h3 style="font-size:20px;margin-bottom:8px">Next up</h3>${nx?`<h4 style="font-size:17px">${esc(nx.title)}</h4><p class="meta" style="margin:4px 0 12px">Due ${fmtD(nx.dueDate)} · ${STL[nx.submissionType]}</p><button class="btn prim" data-go="s-submit" data-p='${JSON.stringify({id:nx.id})}'>Open assignment</button>`:`<p class="muted">No pending assignments in this class.</p>`}</div></div>
+      <h3 style="font-size:20px;margin:22px 0 10px">Latest materials</h3>${ms.length?`<div class="stack">${ms.slice(0,2).map(m=>matRow(m,u.id)).join('')}</div>`:empty('No materials yet.')}`;
+  }else if(tab==='materials')body=ms.length?`<div class="stack">${ms.map(m=>matRow(m,u.id)).join('')}</div>`:empty('Your tutor has not published any materials yet.');
+  else if(tab==='assignments')body=as.length?`<div class="stack">${as.map(a=>assignCard(a,u.id,false)).join('')}</div>`:empty('No assignments yet.');
+  else if(tab==='discussions')body=discussionBlock(c.id,u);
+  else{
+    const doneM=ms.filter(m=>isDone(u.id,m.id)).length,graded=as.filter(a=>statusOf(a.id,u.id)==='graded');
+    body=`<div class="stats"><div class="stat"><b>${pg}%</b><span>Class progress</span></div><div class="stat"><b>${doneM}/${ms.length}</b><span>Materials completed</span></div><div class="stat"><b>${as.filter(a=>['submitted','graded'].includes(statusOf(a.id,u.id))).length}/${as.length}</b><span>Assignments submitted</span></div></div>
+     <div class="tablewrap"><table><thead><tr><th>Assignment</th><th>Status</th><th>Score</th></tr></thead><tbody>${as.map(a=>{const s=subOf(a.id,u.id),st=statusOf(a.id,u.id);return `<tr><td>${esc(a.title)}</td><td>${badge(SL[st],SB[st])}</td><td class="tnum">${st==='graded'?`${s.score}/${a.maxScore}`:'–'}</td></tr>`}).join('')}</tbody></table></div>`;
+  }
+  return `<div class="crumb"><button data-go="s-classes">My Classes</button> / <span>${esc(c.name)}</span></div>
+   <div class="chead"><h1>${esc(c.name)}</h1><p>${esc(c.description)}</p><p style="margin-top:8px">Tutor ${esc(usr(c.tutorId).name)} · ${esc(c.schedule)}</p>
+    <div style="display:flex;justify-content:space-between;margin-top:14px"><span style="color:var(--hero-muted)">Progress</span><span class="pct">${pg}%</span></div>${bar(pg)}</div>
+   <div class="tabs" role="tablist">${tabs.map(t=>`<button role="tab" class="${t[0]===tab?'on':''}" data-act="tab" data-tab="${t[0]}">${t[1]}</button>`).join('')}</div>${body}`;
+};
+function discussionBlock(cid,u){
+  const posts=db.discussions.filter(d=>d.classId===cid).sort((a,b)=>b.date.localeCompare(a.date));
+  return `<div class="card"><form data-f="post" data-cid="${cid}"><div class="fld"><label for="dp">Post to the class</label><textarea id="dp" name="text" placeholder="Ask a question or share something useful" required style="min-height:80px"></textarea></div><button class="btn prim" type="submit">Post</button></form>
+   <div style="margin-top:14px">${posts.map(p=>{const a=usr(p.authorId);return `<div class="post">${avatar(a)}<div class="grow"><div class="rt"><b>${esc(a.name)}</b>${a.role==='tutor'?badge('Tutor','sun'):''}<span class="meta">${fmtD(p.date,1)}</span></div><p>${esc(p.text)}</p></div></div>`}).join('')}</div></div>`;
+}
+V['s-materials']=()=>{
+  const u=me(),cs=classesFor(u),f=R.p.cls||'all';
+  const ms=cs.filter(c=>f==='all'||c.id===f).flatMap(c=>visibleMats(c.id)).sort((a,b)=>b.date.localeCompare(a.date));
+  return ph('Materials','Everything your tutors have published.',cs.length?`<select data-change="cls" aria-label="Filter by class" style="width:auto"><option value="all">All classes</option>${cs.map(c=>`<option value="${c.id}" ${f===c.id?'selected':''}>${esc(c.name)}</option>`).join('')}</select>`:'')+
+   (!cs.length?noProgram():ms.length?`<div class="stack">${ms.map(m=>matRow(m,u.id,true)).join('')}</div>`:empty('No published materials for this filter.'));
+};
+V['s-assign']=()=>{
+  const u=me(),cs=classesFor(u),f=R.p.st||'all';
+  const as=cs.flatMap(c=>classAssigns(c.id)).filter(a=>f==='all'||statusOf(a.id,u.id)===f).sort((a,b)=>a.dueDate.localeCompare(b.dueDate));
+  return ph('Assignments','Submit work, then check grades and feedback.',cs.length?`<select data-change="st" aria-label="Filter by status" style="width:auto"><option value="all">All statuses</option>${Object.keys(SL).map(k=>`<option value="${k}" ${f===k?'selected':''}>${SL[k]}</option>`).join('')}</select>`:'')+
+   (!cs.length?noProgram():as.length?`<div class="stack">${as.map(a=>assignCard(a,u.id)).join('')}</div>`:empty('No assignments match this filter.'));
+};
+V['s-submit']=()=>{
+  const u=me(),a=db.assignments.find(x=>x.id===R.p.id),c=a&&cls(a.classId);
+  if(!a||c.programId!==u.selectedProgramId){setTimeout(()=>{toast('You do not have access to that assignment.');go('s-assign')},0);return ''}
+  const s=subOf(a.id,u.id),st=statusOf(a.id,u.id),locked=['submitted','graded'].includes(st);
+  const needFile=a.submissionType!=='text';
+  const accept=a.submissionType==='audio'?'audio/*':a.submissionType==='video'?'video/*':'';
+  return `<div class="crumb"><button data-go="s-assign">Assignments</button> / <span>${esc(a.title)}</span></div>
+  ${ph(esc(a.title),`${esc(c.name)} · Due ${fmtD(a.dueDate)} · Max score ${a.maxScore}`,badge(SL[st],SB[st]))}
+  <div class="grid two" style="align-items:start">
+   <div class="card"><h3 style="font-size:19px;margin-bottom:8px">Instructions</h3><p>${esc(a.description)}</p><p class="meta" style="margin-top:12px">Submission type: <b>${STL[a.submissionType]}</b></p></div>
+   <div class="card">${locked?`<h3 style="font-size:19px;margin-bottom:8px">Your submission</h3>
+     <div class="sub-box">${esc(s.content)||'<span class="muted">No text.</span>'}</div>${s.fileName?`<p class="meta" style="margin-top:8px">${ic('file',14)} ${esc(s.fileName)}</p>`:''}
+     <p class="meta" style="margin-top:8px">Submitted ${fmtD(s.submittedAt,1)}</p>
+     ${st==='graded'?`<div class="card flat" style="margin-top:14px;background:var(--good-bg);border-color:transparent"><div class="rt"><b style="font-size:26px;font-family:var(--font-display);color:var(--good)">${s.score}/${a.maxScore}</b>${badge('Graded','good')}</div><p style="margin-top:6px">${esc(s.feedback)||'No written feedback.'}</p><p class="meta" style="margin-top:6px">Tutor ${esc(first(usr(a.tutorId).name))}</p></div>`:`<p class="muted" style="margin-top:12px">Waiting for your tutor to grade this submission.</p>`}`
+    :`<h3 style="font-size:19px;margin-bottom:12px">Your answer</h3>
+     <form data-f="submit" data-aid="${a.id}" novalidate>
+      <div class="fld"><label for="sc2">${a.submissionType==='text'?'Text answer':'Notes (optional)'}</label><textarea id="sc2" name="content" placeholder="Write your answer here">${esc(s?s.content:'')}</textarea></div>
+      ${needFile?`<div class="fld"><label for="sf">Upload ${a.submissionType==='file'?'a file':a.submissionType}</label><input id="sf" name="file" type="file" ${accept?`accept="${accept}"`:''}>${s&&s.fileName?`<p class="hint">Current file: ${esc(s.fileName)}. Choose another to replace it.</p>`:''}</div>`:''}
+      <div class="acts"><button class="btn prim" type="submit" name="mode" value="submit">Submit Assignment</button><button class="btn" type="submit" name="mode" value="draft">Save draft</button></div></form>`}</div>
+  </div>`;
+};
+V['s-progress']=()=>{
+  const u=me(),cs=classesFor(u);if(!cs.length)return ph('Progress')+noProgram();
+  const rows=cs.flatMap(c=>classAssigns(c.id).filter(a=>statusOf(a.id,u.id)==='graded').map(a=>({a,c,s:subOf(a.id,u.id)})));
+  const avg=rows.length?Math.round(rows.reduce((t,r)=>t+r.s.score/r.a.maxScore*100,0)/rows.length):null;
+  return ph('Progress',`Program: <b>${esc(prog(u.selectedProgramId).name)}</b>`)+`
+  <div class="stats"><div class="stat"><b>${overall(u)}%</b><span>Overall progress</span></div><div class="stat"><b>${rows.length}</b><span>Graded assignments</span></div><div class="stat"><b>${avg===null?'–':avg+'%'}</b><span>Average grade</span></div></div>
+  <section class="card" style="margin-bottom:16px"><h3 style="font-size:20px;margin-bottom:8px">By class</h3>${cs.map(c=>`<div class="row"><div class="grow"><div style="display:flex;justify-content:space-between;gap:8px"><b>${esc(c.name)}</b><span class="pct">${classProg(u.id,c.id)}%</span></div>${bar(classProg(u.id,c.id))}</div></div>`).join('')}</section>
+  <h3 style="font-size:20px;margin-bottom:10px">Grades and feedback</h3>
+  ${rows.length?`<div class="tablewrap"><table><thead><tr><th>Assignment</th><th>Class</th><th>Score</th><th>Feedback</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${esc(r.a.title)}</td><td>${esc(r.c.name)}</td><td class="tnum"><b>${r.s.score}/${r.a.maxScore}</b></td><td>${esc(r.s.feedback)}</td></tr>`).join('')}</tbody></table></div>`:empty('No graded work yet.')}`;
+};
+V['s-profile']=()=>{
+  const u=me();
+  return ph('Profile')+`<div class="grid two" style="align-items:start"><div class="card"><div class="rt" style="margin-bottom:14px">${avatar(u,52)}<div><h3 style="font-size:20px">${esc(u.name)}</h3><div class="meta">${esc(u.email)} · Student</div></div></div>
+   <form data-f="profile"><div class="fld"><label for="pn">Full name</label><input id="pn" name="name" type="text" value="${esc(u.name)}" required></div>
+   <div class="fld"><label for="pp">Selected program</label><select id="pp" name="program"><option value="">No program</option>${db.programs.map(p=>`<option value="${p.id}" ${u.selectedProgramId===p.id?'selected':''}>${esc(p.name)}</option>`).join('')}</select><p class="hint">Changing your program changes which classes you can open.</p></div>
+   <div class="acts"><button class="btn prim" type="submit">Save changes</button><button type="button" class="btn" data-act="logout">${ic('logout',16)}Logout</button></div></form></div></div>`;
+};
+
+/* ============ tutor views ============ */
+const tSubs=u=>{const ids=tClasses(u).map(c=>c.id);return db.submissions.filter(s=>{const a=db.assignments.find(x=>x.id===s.assignmentId);return a&&ids.includes(a.classId)})};
+V['t-dash']=()=>{
+  const u=me(),cs=tClasses(u),subs=tSubs(u),pend=subs.filter(s=>s.status==='submitted');
+  const pids=[...new Set(cs.map(c=>c.programId))],stu=db.users.filter(x=>x.role==='student'&&pids.includes(x.selectedProgramId));
+  return ph(`Welcome, ${esc(first(u.name))}`,'Your teaching overview.',`<button class="btn prim" data-go="t-class-new">${ic('plus',16)}Create Class</button>`)+`
+  <div class="stats"><div class="stat"><b>${cs.length}</b><span>Classes</span></div><div class="stat"><b>${stu.length}</b><span>Students</span></div><div class="stat"><b>${db.materials.filter(m=>m.tutorId===u.id).length}</b><span>Materials</span></div><div class="stat"><b>${pend.length}</b><span>Waiting for grading</span></div></div>
+  <div class="grid two"><section class="card"><h3 style="font-size:20px;margin-bottom:6px">Needs grading</h3>
+   ${pend.length?pend.slice(0,5).map(s=>{const a=db.assignments.find(x=>x.id===s.assignmentId);return `<div class="row"><div class="grow"><h4 style="font-size:16px">${esc(a.title)}</h4><div class="meta">${esc(usr(s.studentId).name)} · ${esc(cls(a.classId).name)}</div></div><button class="btn sm prim" data-go="t-grade" data-p='${JSON.stringify({id:s.id})}'>Grade</button></div>`}).join(''):empty('No submissions are waiting.')}</section>
+   <section class="card"><h3 style="font-size:20px;margin-bottom:6px">My classes</h3>
+   ${cs.length?cs.map(c=>`<div class="row"><span class="mi">${ic('book')}</span><div class="grow"><h4 style="font-size:16px">${esc(c.name)}</h4><div class="meta">${esc(prog(c.programId).name)} · ${esc(c.schedule)}</div></div><button class="btn sm" data-go="t-class" data-p='${JSON.stringify({id:c.id})}'>Manage</button></div>`).join(''):empty('You have no classes yet.',`<button class="btn prim" data-go="t-class-new">Create your first class</button>`)}</section></div>`;
+};
+V['t-classes']=()=>{
+  const u=me(),cs=tClasses(u);
+  return ph('My Classes','Classes you teach.',`<button class="btn prim" data-go="t-class-new">${ic('plus',16)}Create Class</button>`)+
+  (cs.length?`<div class="grid">${cs.map(c=>`<article class="card stack"><div class="rt"><span class="mi">${ic('book')}</span><div class="grow"><h3 style="font-size:19px">${esc(c.name)}</h3><div class="meta">${esc(prog(c.programId).name)}</div></div></div>
+   <div class="meta">${ic('clock',14)} ${esc(c.schedule)}</div>
+   <div class="meta">Students: <b>${studentsOfProgram(c.programId).length}/${c.max}</b> · Materials: <b>${db.materials.filter(m=>m.classId===c.id).length}</b> · Assignments: <b>${classAssigns(c.id).length}</b></div>
+   <button class="btn prim" data-go="t-class" data-p='${JSON.stringify({id:c.id})}'>Manage Class</button></article>`).join('')}</div>`:empty('You have not created a class yet.',`<button class="btn prim" data-go="t-class-new">Create Class</button>`));
+};
+V['t-class-new']=()=>{
+  const u=me();
+  return `<div class="crumb"><button data-go="t-classes">My Classes</button> / <span>Create Class</span></div>${ph('Create Class','New classes appear for every student enrolled in the program you choose.')}
+  <div class="card" style="max-width:720px"><form data-f="class-new">
+   <div class="fld"><label for="cn">Class Name</label><input id="cn" name="name" type="text" placeholder="Speaking Class" required></div>
+   <div class="fld"><label for="cd">Description</label><textarea id="cd" name="description" required placeholder="What students will do in this class"></textarea></div>
+   <div class="frow"><div class="fld"><label for="cp">Program</label><select id="cp" name="programId" required>${db.programs.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('')}</select></div>
+    <div class="fld"><label for="cl">Level</label><select id="cl" name="level">${['Beginner','Beginner–Intermediate','Intermediate','Intermediate–Advanced','Advanced'].map(l=>`<option ${l==='Intermediate'?'selected':''}>${l}</option>`).join('')}</select></div></div>
+   <div class="frow"><div class="fld"><label for="cs">Schedule</label><input id="cs" name="schedule" type="text" placeholder="Monday & Wednesday, 19:00" required></div>
+    <div class="fld"><label for="cm">Maximum Students</label><input id="cm" name="max" type="number" min="1" max="200" value="20" required></div></div>
+   <div class="frow"><div class="fld"><label for="ct">Class Type</label><select id="ct" name="classType"><option>Live group classes</option><option>Small-group live classes</option><option>Interactive workshops</option><option>Self-paced with tutor review</option></select></div>
+    <div class="fld"><label for="cu">Tutor</label><input id="cu" type="text" value="${esc(u.name)}" disabled><p class="hint">Classes are created under your account.</p></div></div>
+   <div class="acts"><button class="btn prim" type="submit">Create Class</button><button type="button" class="btn" data-go="t-classes">Cancel</button></div></form></div>`;
+};
+function tMatRow(m){
+  const sched=m.date>todayS();
+  return `<article class="cardrow"><div class="mi t-${m.type}">${ic(TI[m.type])}</div><div class="grow"><div class="rt"><h4>${esc(m.title)}</h4>${badge(TL[m.type],'info')}${m.published?(sched?badge('Scheduled '+fmtD(m.date,1),'warn'):badge('Published','good')):badge('Unpublished')}</div>
+   <p class="muted" style="margin-top:2px">${esc(m.description)}</p><p class="meta" style="margin-top:4px">${esc(cls(m.classId).name)} · ${fmtD(m.date,1)}${m.fileName?` · ${esc(m.fileName)}`:''}</p></div>
+   <div class="acts"><button class="btn sm" data-act="toggle-pub" data-id="${m.id}">${m.published?'Unpublish':'Publish'}</button><button class="btn sm" data-go="t-material-form" data-p='${JSON.stringify({id:m.id})}'>${ic('edit',14)}Edit</button><button class="btn sm danger" data-act="del-mat" data-id="${m.id}">${ic('trash',14)}Delete</button></div></article>`;
+}
+V['t-class']=()=>{
+  const u=me(),c=cls(R.p.id);
+  if(!c||c.tutorId!==u.id){setTimeout(()=>{toast('You can only manage your own classes.');go('t-classes')},0);return ''}
+  const tab=R.p.tab||'materials',ms=db.materials.filter(m=>m.classId===c.id),as=classAssigns(c.id),st=studentsOfProgram(c.programId);
+  const tabs=[['materials','Materials'],['assignments','Assignments'],['students','Students'],['discussions','Discussions']];
+  let body='';
+  if(tab==='materials')body=`<div class="acts" style="margin-bottom:12px"><button class="btn prim sm" data-go="t-material-form" data-p='${JSON.stringify({cid:c.id})}'>${ic('plus',14)}Add Material</button></div>${ms.length?`<div class="stack">${ms.map(tMatRow).join('')}</div>`:empty('No materials yet.')}`;
+  else if(tab==='assignments')body=`<div class="acts" style="margin-bottom:12px"><button class="btn prim sm" data-go="t-assign-new" data-p='${JSON.stringify({cid:c.id})}'>${ic('plus',14)}Create Assignment</button></div>${as.length?`<div class="stack">${as.map(tAssignRow).join('')}</div>`:empty('No assignments yet.')}`;
+  else if(tab==='students')body=st.length?`<div class="tablewrap"><table><thead><tr><th>Student</th><th>Email</th><th>Progress</th></tr></thead><tbody>${st.map(s=>`<tr><td><div class="rt">${avatar(s)}${esc(s.name)}</div></td><td>${esc(s.email)}</td><td style="min-width:140px"><span class="pct">${classProg(s.id,c.id)}%</span>${bar(classProg(s.id,c.id))}</td></tr>`).join('')}</tbody></table></div>`:empty('No students are enrolled in this program yet.');
+  else body=discussionBlock(c.id,u);
+  return `<div class="crumb"><button data-go="t-classes">My Classes</button> / <span>${esc(c.name)}</span></div>
+  <div class="chead"><div class="chips" style="margin-bottom:8px"><span class="badge sun">${esc(prog(c.programId).name)}</span></div><h1>${esc(c.name)}</h1><p>${esc(c.description)}</p><p style="margin-top:8px">${esc(c.schedule)} · ${esc(c.level)} · up to ${c.max} students · ${st.length} enrolled</p></div>
+  <div class="tabs" role="tablist">${tabs.map(t=>`<button role="tab" class="${t[0]===tab?'on':''}" data-act="tab" data-tab="${t[0]}">${t[1]}</button>`).join('')}</div>${body}`;
+};
+V['t-materials']=()=>{
+  const u=me(),cs=tClasses(u),f=R.p.cls||'all';
+  const ms=db.materials.filter(m=>m.tutorId===u.id&&(f==='all'||m.classId===f)).sort((a,b)=>b.date.localeCompare(a.date));
+  return ph('Materials','Upload, edit and publish learning materials.',`<select data-change="cls" aria-label="Filter by class" style="width:auto"><option value="all">All classes</option>${cs.map(c=>`<option value="${c.id}" ${f===c.id?'selected':''}>${esc(c.name)}</option>`).join('')}</select><button class="btn prim" data-go="t-material-form">${ic('plus',16)}Add Material</button>`)+
+   (!cs.length?empty('Create a class before adding materials.',`<button class="btn prim" data-go="t-class-new">Create Class</button>`):ms.length?`<div class="stack">${ms.map(tMatRow).join('')}</div>`:empty('No materials here yet.'));
+};
+V['t-material-form']=()=>{
+  const u=me(),cs=tClasses(u),m=R.p.id?db.materials.find(x=>x.id===R.p.id&&x.tutorId===u.id):null;
+  if(!cs.length)return empty('Create a class before adding materials.',`<button class="btn prim" data-go="t-class-new">Create Class</button>`);
+  const v=m||{title:'',description:'',classId:R.p.cid||cs[0].id,type:'pdf',fileName:'',fileUrl:'',date:todayS(),published:true};
+  return `<div class="crumb"><button data-go="t-materials">Materials</button> / <span>${m?'Edit Material':'Add Material'}</span></div>${ph(m?'Edit Material':'Add Material','Students only see published materials on or after the publish date.')}
+  <div class="card" style="max-width:720px"><form data-f="material" data-id="${m?m.id:''}" novalidate>
+   <div class="fld"><label for="mt">Material Title</label><input id="mt" name="title" type="text" value="${esc(v.title)}" required></div>
+   <div class="fld"><label for="md">Description</label><textarea id="md" name="description" style="min-height:80px">${esc(v.description)}</textarea></div>
+   <div class="frow"><div class="fld"><label for="mc">Class</label><select id="mc" name="classId">${cs.map(c=>`<option value="${c.id}" ${v.classId===c.id?'selected':''}>${esc(c.name)} (${esc(prog(c.programId).name)})</option>`).join('')}</select></div>
+    <div class="fld"><label for="my">Material Type</label><select id="my" name="type">${Object.keys(TL).map(k=>`<option value="${k}" ${v.type===k?'selected':''}>${k==='link'?'Link':TL[k]}</option>`).join('')}</select></div></div>
+   <div class="fld"><label for="mf">Upload File</label><input id="mf" name="file" type="file">${v.fileName?`<p class="hint">Current file: ${esc(v.fileName)}</p>`:''}</div>
+   <div class="fld"><label for="ml">External Link</label><input id="ml" name="fileUrl" type="url" placeholder="https://" value="${esc(v.fileUrl)}"><p class="hint">Required when the type is Link.</p></div>
+   <div class="frow"><div class="fld"><label for="mp">Publish Date</label><input id="mp" name="date" type="date" value="${esc(v.date)}" required></div>
+    <div class="fld"><label>Visibility</label><label class="check" style="margin-top:10px"><input type="checkbox" name="published" ${v.published?'checked':''}> Published</label></div></div>
+   <div class="acts"><button class="btn prim" type="submit">${m?'Save changes':'Add Material'}</button><button type="button" class="btn" data-go="t-materials">Cancel</button></div></form></div>`;
+};
+function tAssignRow(a){
+  const subs=db.submissions.filter(s=>s.assignmentId===a.id),pend=subs.filter(s=>s.status==='submitted').length;
+  return `<article class="cardrow"><div class="mi">${ic('clip')}</div><div class="grow"><div class="rt"><h4>${esc(a.title)}</h4>${badge(STL[a.submissionType],'info')}${pend?badge(pend+' to grade','warn'):''}</div>
+   <p class="muted" style="margin-top:2px">${esc(a.description)}</p><p class="meta" style="margin-top:4px">${esc(cls(a.classId).name)} · Due ${fmtD(a.dueDate,1)} · Max ${a.maxScore} · ${subs.length} submission${subs.length===1?'':'s'}</p></div>
+   <div class="acts"><button class="btn sm prim" data-go="t-subs" data-p='${JSON.stringify({aid:a.id})}'>View submissions</button><button class="btn sm danger" data-act="del-assign" data-id="${a.id}">${ic('trash',14)}Delete</button></div></article>`;
+}
+V['t-assign']=()=>{
+  const u=me(),ids=tClasses(u).map(c=>c.id),as=db.assignments.filter(a=>ids.includes(a.classId)).sort((a,b)=>a.dueDate.localeCompare(b.dueDate));
+  return ph('Assignments','Tasks for your classes.',`<button class="btn prim" data-go="t-assign-new">${ic('plus',16)}Create Assignment</button>`)+(as.length?`<div class="stack">${as.map(tAssignRow).join('')}</div>`:empty('No assignments yet.'));
+};
+V['t-assign-new']=()=>{
+  const u=me(),cs=tClasses(u);
+  if(!cs.length)return empty('Create a class before adding assignments.',`<button class="btn prim" data-go="t-class-new">Create Class</button>`);
+  return `<div class="crumb"><button data-go="t-assign">Assignments</button> / <span>Create Assignment</span></div>${ph('Create Assignment')}
+  <div class="card" style="max-width:720px"><form data-f="assign" novalidate>
+   <div class="fld"><label for="at">Assignment title</label><input id="at" name="title" type="text" placeholder="Describe Your Daily Routine" required></div>
+   <div class="fld"><label for="ad">Description</label><textarea id="ad" name="description" required></textarea></div>
+   <div class="frow"><div class="fld"><label for="ac">Class</label><select id="ac" name="classId">${cs.map(c=>`<option value="${c.id}" ${R.p.cid===c.id?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div>
+    <div class="fld"><label for="au">Due date</label><input id="au" name="dueDate" type="date" value="${addDays(7)}" required></div></div>
+   <div class="frow"><div class="fld"><label for="as">Submission type</label><select id="as" name="submissionType">${Object.keys(STL).map(k=>`<option value="${k}">${STL[k]}</option>`).join('')}</select></div>
+    <div class="fld"><label for="am">Maximum score</label><input id="am" name="maxScore" type="number" min="1" max="1000" value="100" required></div></div>
+   <div class="acts"><button class="btn prim" type="submit">Create Assignment</button><button type="button" class="btn" data-go="t-assign">Cancel</button></div></form></div>`;
+};
+V['t-subs']=()=>{
+  const u=me(),ids=tClasses(u).map(c=>c.id),aid=R.p.aid||'all',st=R.p.st||'all';
+  const myA=db.assignments.filter(a=>ids.includes(a.classId));
+  const rows=tSubs(u).filter(s=>(aid==='all'||s.assignmentId===aid)&&(st==='all'||s.status===st)).sort((a,b)=>b.submittedAt.localeCompare(a.submittedAt));
+  return ph('Student Submissions','Review work and give feedback.',`<select data-change="aid" aria-label="Filter by assignment" style="width:auto;max-width:100%"><option value="all">All assignments</option>${myA.map(a=>`<option value="${a.id}" ${aid===a.id?'selected':''}>${esc(a.title)}</option>`).join('')}</select><select data-change="st" aria-label="Filter by status" style="width:auto"><option value="all">All statuses</option>${Object.keys(SL).filter(k=>k!=='not_started').map(k=>`<option value="${k}" ${st===k?'selected':''}>${SL[k]}</option>`).join('')}</select>`)+
+  (rows.length?`<div class="tablewrap"><table><thead><tr><th>Student</th><th>Assignment</th><th>Class</th><th>Submitted</th><th>Status</th><th>Score</th><th></th></tr></thead><tbody>${rows.map(s=>{const a=db.assignments.find(x=>x.id===s.assignmentId);return `<tr><td><div class="rt">${avatar(usr(s.studentId))}${esc(usr(s.studentId).name)}</div></td><td>${esc(a.title)}</td><td>${esc(cls(a.classId).name)}</td><td class="tnum">${fmtD(s.submittedAt,1)}</td><td>${badge(SL[s.status],SB[s.status])}</td><td class="tnum">${s.status==='graded'?`${s.score}/${a.maxScore}`:'–'}</td><td><button class="btn sm ${s.status==='graded'?'':'prim'}" data-go="t-grade" data-p='${JSON.stringify({id:s.id})}'>${s.status==='graded'?'Review':'Grade'}</button></td></tr>`}).join('')}</tbody></table></div>`:empty('No submissions match these filters.'));
+};
+V['t-grade']=()=>{
+  const u=me(),s=db.submissions.find(x=>x.id===R.p.id),a=s&&db.assignments.find(x=>x.id===s.assignmentId);
+  if(!a||cls(a.classId).tutorId!==u.id){setTimeout(()=>{toast('Submission not found.');go('t-subs')},0);return ''}
+  const stu=usr(s.studentId);
+  return `<div class="crumb"><button data-go="t-subs">Student Submissions</button> / <span>Grade</span></div>${ph('Grade Submission',`${esc(a.title)} · ${esc(cls(a.classId).name)}`,badge(SL[s.status],SB[s.status]))}
+  <div class="grid two" style="align-items:start">
+   <div class="card"><div class="rt" style="margin-bottom:12px">${avatar(stu,44)}<div><h3 style="font-size:19px">${esc(stu.name)}</h3><div class="meta">Submitted ${fmtD(s.submittedAt)}</div></div></div>
+    <div class="meta" style="margin-bottom:6px">Assignment: ${esc(a.description)}</div><div class="sub-box">${esc(s.content)||'<span class="muted">No text answer.</span>'}</div>${s.fileName?`<p class="meta" style="margin-top:10px">${ic('file',14)} Attached: <b>${esc(s.fileName)}</b></p>`:''}</div>
+   <div class="card"><form data-f="grade" data-id="${s.id}" novalidate>
+    <div class="fld"><label for="gs">Score (max ${a.maxScore})</label><input id="gs" name="score" type="number" min="0" max="${a.maxScore}" value="${s.score??''}"></div>
+    <div class="fld"><label for="gf">Feedback</label><textarea id="gf" name="feedback" placeholder="What went well and what to improve">${esc(s.feedback)}</textarea></div>
+    <div class="fld"><label for="gt">Status</label><select id="gt" name="status">${['in_progress','submitted','graded'].map(k=>`<option value="${k}" ${(s.status===k||(s.status==='submitted'&&k==='graded'&&false))?'selected':''}>${SL[k]}</option>`).join('')}</select><p class="hint">Saving a score with status Graded releases the grade to the student. In Progress returns the work for revision.</p></div>
+    <div class="acts"><button class="btn prim" type="submit">Save grade</button><button type="button" class="btn" data-go="t-subs">Cancel</button></div></form></div></div>`;
+};
+V['t-students']=()=>{
+  const u=me(),cs=tClasses(u),pids=[...new Set(cs.map(c=>c.programId))],st=db.users.filter(x=>x.role==='student'&&pids.includes(x.selectedProgramId));
+  return ph('Students','Students enrolled in the programs you teach in.')+(st.length?`<div class="tablewrap"><table><thead><tr><th>Student</th><th>Program</th><th>Your classes</th><th>Progress</th></tr></thead><tbody>${st.map(s=>{const mine=cs.filter(c=>c.programId===s.selectedProgramId),pg=Math.round(mine.reduce((t,c)=>t+classProg(s.id,c.id),0)/mine.length);return `<tr><td><div class="rt">${avatar(s)}<div><b>${esc(s.name)}</b><div class="meta">${esc(s.email)}</div></div></div></td><td>${esc(prog(s.selectedProgramId).name)}</td><td>${mine.map(c=>esc(c.name)).join(', ')}</td><td style="min-width:130px"><span class="pct">${pg}%</span>${bar(pg)}</td></tr>`}).join('')}</tbody></table></div>`:empty('No students are enrolled yet.'));
+};
+V['t-profile']=()=>{
+  const u=me(),cs=tClasses(u);
+  return ph('Profile')+`<div class="card" style="max-width:560px"><div class="rt" style="margin-bottom:14px">${avatar(u,52)}<div><h3 style="font-size:20px">${esc(u.name)}</h3><div class="meta">${esc(u.email)} · Tutor · ${cs.length} class${cs.length===1?'':'es'}</div></div></div>
+   <form data-f="profile"><div class="fld"><label for="pn">Full name</label><input id="pn" name="name" type="text" value="${esc(u.name)}" required></div><div class="acts"><button class="btn prim" type="submit">Save changes</button><button type="button" class="btn" data-act="logout">${ic('logout',16)}Logout</button></div></form></div>`;
+};
+
+/* ============ render ============ */
+function render(){
+  const u=me(),fn=V[R.name]||V.landing,html=fn(),app=document.getElementById('app');
+  app.innerHTML=PUBLIC.includes(R.name)||R.name==='role'?html:appShell(u,html);
+}
+function modal(html){document.getElementById('modal').innerHTML=html?`<div class="modal-back" data-act="close-modal"><div class="modal" role="dialog" aria-modal="true">${html}</div></div>`:''}
+let confirmFn=null;
+function ask(title,msg,label,fn){confirmFn=fn;modal(`<h3>${esc(title)}</h3><p class="muted">${esc(msg)}</p><div class="acts" style="margin-top:16px;justify-content:flex-end"><button class="btn" data-act="close-modal">Cancel</button><button class="btn prim" data-act="confirm-yes">${esc(label)}</button></div>`)}
+
+/* ============ actions ============ */
+const H={
+ 'open-menu'(){document.querySelector('.side').classList.add('open');document.querySelector('.scrim').classList.add('on')},
+ 'close-menu':closeMenu,
+ 'close-modal'(el,e){if(e.target===el||el.tagName==='BUTTON')modal('')},
+ 'confirm-yes'(){const f=confirmFn;confirmFn=null;modal('');f&&f()},
+ logout(){Auth.signOut();save();toast('Logged out.');go('landing')},
+ google(){try{afterAuth(Auth.signInGoogle())}catch(e){toast(e.message)}},
+ demo(el){try{afterAuth(Auth.signInEmail({email:el.dataset.email,password:'demo'}))}catch(e){toast(e.message)}},
+ register(el){
+  const id=el.dataset.id,u=me();db.pending=id;save();
+  if(!u)return go('signup');
+  if(u.role==='tutor')return toast('Tutors cannot enroll in programs. Log out to sign up as a student.');
+  if(!u.role)return go('role');
+  u.selectedProgramId=id;syncEnroll(u);save();toast(`Enrolled in ${prog(id).name}.`);go('s-dash');
+ },
+ role(el){
+  const u=me(),r=el.dataset.role;u.role=r;
+  if(r==='student'){if(db.pending){u.selectedProgramId=db.pending}syncEnroll(u)}
+  db.pending=null;save();toast(r==='student'?'Welcome, student!':'Welcome, tutor!');go(homeOf(u));
+ },
+ tab(el){R.p.tab=el.dataset.tab;render()},
+ 'view-mat'(el){
+  const m=db.materials.find(x=>x.id===el.dataset.id);
+  modal(`<h3>${esc(m.title)}</h3><div class="meta">${TL[m.type]} · ${fmtD(m.date,1)}</div><div class="preview">${ic(TI[m.type],34)}<b>${esc(m.fileName||m.fileUrl||TL[m.type])}</b><span class="meta">Preview is simulated in this prototype.</span></div><p class="muted">${esc(m.description)}</p>
+   <div class="acts" style="margin-top:16px;justify-content:flex-end">${m.type==='link'&&m.fileUrl?`<a class="btn prim" href="${esc(m.fileUrl)}" target="_blank" rel="noopener">Open link</a>`:''}<button class="btn" data-act="close-modal">Close</button></div>`);
+ },
+ 'dl-mat'(el){const m=db.materials.find(x=>x.id===el.dataset.id);toast(m.type==='link'?'This is a link. Use View to open it.':`Download started for ${m.fileName||m.title} (simulated).`)},
+ 'complete-mat'(el){
+  const u=me(),id=el.dataset.id,i=db.completions.findIndex(c=>c.studentId===u.id&&c.materialId===id);
+  if(i>=0)db.completions.splice(i,1);else db.completions.push({studentId:u.id,materialId:id});
+  save();render();toast(i>=0?'Marked as not completed.':'Marked as completed.');
+ },
+ 'toggle-pub'(el){const m=db.materials.find(x=>x.id===el.dataset.id);m.published=!m.published;save();render();toast(m.published?'Material published.':'Material unpublished.')},
+ 'del-mat'(el){const id=el.dataset.id,m=db.materials.find(x=>x.id===id);ask('Delete material?',`"${m.title}" will be removed for you and your students.`,'Delete',()=>{db.materials=db.materials.filter(x=>x.id!==id);db.completions=db.completions.filter(c=>c.materialId!==id);save();render();toast('Material deleted.')})},
+ 'del-assign'(el){const id=el.dataset.id,a=db.assignments.find(x=>x.id===id);ask('Delete assignment?',`"${a.title}" and all of its submissions will be removed.`,'Delete',()=>{db.assignments=db.assignments.filter(x=>x.id!==id);db.submissions=db.submissions.filter(s=>s.assignmentId!==id);save();render();toast('Assignment deleted.')})}
+};
+const F={
+ login(d){try{afterAuth(Auth.signInEmail({email:d.email.trim(),password:d.password}))}catch(e){toast(e.message)}},
+ signup(d){
+  if(!d.name.trim()||!d.email.trim())return toast('Enter your name and email.');
+  if(d.password.length<6)return toast('Password must be at least 6 characters.');
+  if(d.password!==d.confirm)return toast('Passwords do not match.');
+  try{afterAuth(Auth.signUpEmail({name:d.name.trim(),email:d.email.trim(),password:d.password}))}catch(e){toast(e.message)}
+ },
+ post(d,f){const u=me();if(!d.text.trim())return;db.discussions.push({id:uid('d'),classId:f.dataset.cid,authorId:u.id,text:d.text.trim(),date:todayS()});save();render();toast('Posted.')},
+ profile(d){
+  const u=me();if(!d.name.trim())return toast('Name cannot be empty.');
+  u.name=d.name.trim();
+  if(u.role==='student'&&'program' in d){u.selectedProgramId=d.program||null;syncEnroll(u)}
+  save();render();toast('Profile saved.');
+ },
+ submit(d,f,e){
+  const u=me(),a=db.assignments.find(x=>x.id===f.dataset.aid),mode=(e.submitter&&e.submitter.value)||'submit';
+  let s=subOf(a.id,u.id);const file=f.elements.file&&f.elements.file.files[0];
+  const fileName=file?file.name:(s?s.fileName:'');
+  if(mode==='submit'){
+    if(a.submissionType==='text'&&!d.content.trim())return toast('Write your answer before submitting.');
+    if(a.submissionType!=='text'&&!fileName)return toast('Upload a file before submitting.');
+  }
+  if(!s){s={id:uid('s'),assignmentId:a.id,studentId:u.id,score:null,feedback:''};db.submissions.push(s)}
+  Object.assign(s,{content:d.content||'',fileName,status:mode==='submit'?'submitted':'in_progress',submittedAt:todayS()});
+  save();render();toast(mode==='submit'?'Assignment submitted.':'Draft saved.');
+ },
+ 'class-new'(d){
+  const u=me();
+  const c={id:uid('c'),programId:d.programId,tutorId:u.id,name:d.name.trim(),description:d.description.trim(),schedule:d.schedule.trim(),level:d.level,max:Math.max(1,parseInt(d.max)||20),classType:d.classType};
+  if(!c.name||!c.schedule)return toast('Enter a class name and schedule.');
+  db.classes.push(c);
+  db.users.filter(x=>x.role==='student'&&x.selectedProgramId===c.programId).forEach(s=>syncEnroll(s));
+  save();toast(`Class created in ${prog(c.programId).name}.`);go('t-class',{id:c.id});
+ },
+ material(d,f){
+  const u=me(),id=f.dataset.id,file=f.elements.file.files[0],type=d.type;
+  if(!d.title.trim())return toast('Enter a title.');
+  if(type==='link'&&!d.fileUrl.trim())return toast('Add the external link for a Link material.');
+  const ex=id?db.materials.find(x=>x.id===id):null;
+  const rec={title:d.title.trim(),description:d.description.trim(),classId:d.classId,type,fileName:file?file.name:(ex?ex.fileName:''),fileUrl:d.fileUrl.trim(),published:'published' in d,date:d.date||todayS()};
+  if(type!=='link'&&!rec.fileName&&!rec.fileUrl)return toast('Upload a file or add a link.');
+  if(ex)Object.assign(ex,rec);else db.materials.push(Object.assign({id:uid('m'),tutorId:u.id},rec));
+  save();toast(ex?'Material updated.':'Material added.');go('t-materials');
+ },
+ assign(d){
+  const u=me();if(!d.title.trim()||!d.description.trim())return toast('Enter a title and description.');
+  db.assignments.push({id:uid('a'),classId:d.classId,tutorId:u.id,title:d.title.trim(),description:d.description.trim(),dueDate:d.dueDate,submissionType:d.submissionType,maxScore:Math.max(1,parseInt(d.maxScore)||100)});
+  save();toast('Assignment created.');go('t-assign');
+ },
+ grade(d,f){
+  const s=db.submissions.find(x=>x.id===f.dataset.id),a=db.assignments.find(x=>x.id===s.assignmentId);
+  const hasScore=d.score!==''&&d.score!==undefined,score=hasScore?Number(d.score):null;
+  if(d.status==='graded'&&!hasScore)return toast('Enter a score to mark this as graded.');
+  if(hasScore&&(score<0||score>a.maxScore))return toast(`Score must be between 0 and ${a.maxScore}.`);
+  Object.assign(s,{score,feedback:d.feedback.trim(),status:d.status});
+  save();toast(d.status==='graded'?'Grade released to the student.':'Submission updated.');go('t-subs');
+ }
+};
+
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');
+  if(g){e.preventDefault();let p={};try{p=g.dataset.p?JSON.parse(g.dataset.p):{}}catch(x){}return go(g.dataset.go,p)}
+  const a=e.target.closest('[data-act]');
+  if(a&&H[a.dataset.act]){
+    if(a.dataset.act==='close-modal'&&a.classList.contains('modal-back')&&e.target!==a)return;
+    H[a.dataset.act](a,e);
+  }
+});
+document.addEventListener('submit',e=>{
+  const f=e.target.closest('form[data-f]');if(!f)return;e.preventDefault();
+  const d=Object.fromEntries([...new FormData(f).entries()].filter(x=>typeof x[1]==='string'));
+  const h=F[f.dataset.f];if(h)h(d,f,e);
+});
+document.addEventListener('change',e=>{
+  const s=e.target.closest('[data-change]');if(!s)return;
+  R.p=Object.assign({},R.p,{[s.dataset.change]:s.value});render();
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){modal('');closeMenu()}});
+
+render();
+</script>
+
+</body>
